@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تطبيق التواصل الاجتماعي الاحترافي</title>
+    
+    <!-- PWA Setup & Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1877f2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
         :root {
             --bg-color: #f0f2f5;
@@ -286,6 +294,13 @@
         import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed: ', err));
+            });
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyD3dC6ucOkNeo65pHx4JzPDwQ_jgciBu6Q",
