@@ -27,23 +27,52 @@
         .content{flex:1;overflow:auto;padding:12px 12px 78px}
         .page{display:none}.page.active{display:block}
         .card{background:var(--card);border-radius:13px;padding:13px;margin-bottom:12px;box-shadow:var(--shadow)}
-        .stories{display:flex;gap:9px;overflow:auto;margin-bottom:12px;scrollbar-width:none}.stories::-webkit-scrollbar{display:none}
-        .story{min-width:78px;height:108px;border-radius:12px;overflow:hidden;position:relative;background:#111;border:2px solid var(--primary)}
-        .story img,.story video{width:100%;height:100%;object-fit:cover}.story span{position:absolute;bottom:5px;right:4px;left:4px;color:#fff;font-size:10px;text-align:center;text-shadow:0 1px 3px #000}
-        .addstory{background:var(--input);border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--primary);font-weight:bold}
-        .trigger{display:flex;gap:10px;align-items:center}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ddd}.pill{flex:1;background:var(--input);padding:11px 15px;border-radius:22px;color:var(--sub)}
-        .post-head{display:flex;justify-content:space-between;align-items:center}.user{display:flex;gap:9px;align-items:center;cursor:pointer}.name{font-weight:bold;font-size:14px}.time{font-size:11px;color:var(--sub);margin-top:3px}
-        .post-text{line-height:1.55;margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}.media{width:100%;max-height:360px;object-fit:cover;border-radius:9px;background:#000;display:block}
-        .stats{display:flex;justify-content:space-between;color:var(--sub);font-size:12px;border-bottom:1px solid var(--border);padding:8px 0}.actions{display:flex}.action{flex:1;border:0;background:none;color:var(--sub);padding:9px 3px;font-weight:bold;border-radius:7px}.action.liked{color:var(--danger)}.comments{border-top:1px solid var(--border);margin-top:5px;padding-top:8px}.comment{background:var(--input);border-radius:13px;padding:8px 11px;margin:6px 0;font-size:13px}.comment small{color:var(--sub)}
-        input,textarea,.select{width:100%;border:1px solid var(--border);background:var(--input);color:var(--text);border-radius:9px;padding:11px;outline:none;margin:5px 0 9px}.btn{width:100%;border:0;border-radius:9px;padding:11px;background:var(--primary);color:#fff;font-weight:bold}.secondary{background:var(--input);color:var(--text)}.danger{background:var(--danger);color:#fff}
-        .nav{position:absolute;bottom:0;left:0;right:0;height:64px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:30}.nav button{flex:1;border:0;background:none;color:var(--sub);font-size:11px}.nav button b{display:block;font-size:20px}.nav button.active{color:var(--primary)}
-        .search{display:flex;gap:7px}.search input{margin:0}.list{display:flex;flex-direction:column;gap:8px}
+        
+        /* تصميم صفحات التطبيق */
+        .tab-content { display: none; flex: 1; overflow-y: auto; padding-bottom: 70px; }
+        .tab-content.active { display: block; }
+
+        /* تصميم قسم الريلز */
+        .reels-container {
+            height: calc(100vh - 120px);
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            background: #000;
+        }
+        .reel-item {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+        }
+        .reel-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .reel-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 15px;
+            left: 15px;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        .nav{position:absolute;bottom:0;left:0;right:0;height:64px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:30}
+        .nav button{flex:1;border:0;background:none;color:var(--sub);font-size:11px}
+        .nav button b{display:block;font-size:20px}
+        .nav button.active{color:var(--primary)}
     </style>
 </head>
 <body>
 
     <script>
-        // تسجيل Service Worker لتمكين ميزات تطبيق الـ PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed: ', err));
@@ -58,18 +87,63 @@
         </header>
         
         <div class="content">
-            <div class="card">
-                <h2>أهلاً بك في SocialX V3.3</h2>
-                <p style="color:var(--sub); margin-top:5px;">التطبيق جاهز الآن للتحويل إلى APK عبر PWABuilder.</p>
+            <!-- الصفحة الرئيسية -->
+            <div id="homeTab" class="tab-content active">
+                <div class="card">
+                    <h2>الرئيسية 🏠</h2>
+                    <p style="color:var(--sub); margin-top:5px;">محتوى المنشورات والقصص يظهر هنا.</p>
+                </div>
+            </div>
+
+            <!-- صفحة الريلز الجديدة -->
+            <div id="reelsTab" class="tab-content">
+                <div class="reels-container">
+                    <div class="reel-item">
+                        <video class="reel-video" src="" controls loop poster="https://via.placeholder.com/480x800?text=Reel+1"></video>
+                        <div class="reel-overlay">
+                            <h3>@username</h3>
+                            <p>فيديو قصير ريلز تجريبي #SocialX</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- صفحة الرسائل -->
+            <div id="chatTab" class="tab-content">
+                <div class="card">
+                    <h2>الرسائل 💬</h2>
+                    <p style="color:var(--sub); margin-top:5px;">قائمة المحادثات الفورية.</p>
+                </div>
+            </div>
+
+            <!-- صفحة الملف الشخصي -->
+            <div id="profileTab" class="tab-content">
+                <div class="card">
+                    <h2>الملف الشخصي 👤</h2>
+                    <p style="color:var(--sub); margin-top:5px;">إعدادات حسابك ومعلوماتك.</p>
+                </div>
             </div>
         </div>
 
+        <!-- شريط التنقل السفلي -->
         <nav class="nav">
-            <button class="active"><b>🏠</b>الرئيسية</button>
-            <button><b>💬</b>الرسائل</button>
-            <button><b>👤</b>الملف الشخصي</button>
+            <button class="active" onclick="switchTab('homeTab', this)"><b>🏠</b>الرئيسية</button>
+            <button onclick="switchTab('reelsTab', this)"><b>🎬</b>ريلز</button>
+            <button onclick="switchTab('chatTab', this)"><b>💬</b>الرسائل</button>
+            <button onclick="switchTab('profileTab', this)"><b>👤</b>الملف الشخصي</button>
         </nav>
     </div>
+
+    <script>
+        // دالة التنقل بين التبويبات
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
 
 </body>
 </html>
